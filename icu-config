@@ -10,25 +10,25 @@
 
 ### END of icu-config-top
 
-exec_prefix=`pkg-config --variable=exec_prefix icu`
+exec_prefix=`pkg-config --variable=exec_prefix icu42`
 execprefix=$exec_prefix
-prefix=`pkg-config --variable=prefix icu`
+prefix=`pkg-config --variable=prefix icu42`
 
 
 loaddefs()
 {
 
-libdir=`pkg-config --variable=libdir icu`
-bindir=`pkg-config --variable=bindir icu`
-datadir=`pkg-config --variable=datadir icu`
-bindir=`pkg-config --variable=sbindir icu`
+libdir=`pkg-config --variable=libdir icu42`
+bindir=`pkg-config --variable=bindir icu42`
+datadir=`pkg-config --variable=datadir icu42`
+bindir=`pkg-config --variable=sbindir icu42`
 
 # about the ICU version
-VERSION=`pkg-config --modversion icu`
-UNICODE_VERSION=`pkg-config --variable=UNICODE_VERSION icu`
+VERSION=`pkg-config --modversion icu42`
+UNICODE_VERSION=`pkg-config --variable=UNICODE_VERSION icu42`
 
 # for icu-config to test with
-ICULIBS_COMMON_LIB_NAME=`pkg-config --variable=ICULIBS_COMMON_LIB_NAME icu`
+ICULIBS_COMMON_LIB_NAME=`pkg-config --variable=ICULIBS_COMMON_LIB_NAME icu42`
 
 # Proper echo newline handling is needed in icu-config
 ECHO_N="-n"
@@ -36,8 +36,8 @@ ECHO_C=""
 
 LDLIBRARYPATH_ENVVAR="LD_LIBRARY_PATH"
 
-pkgdatadir=`pkg-config --variable=pkgdatadir icu`
-pkglibdir=`pkg-config --variable=pkglibdir icu`
+pkgdatadir=`pkg-config --variable=pkgdatadir icu42`
+pkglibdir=`pkg-config --variable=pkglibdir icu42`
 
 CC="gcc"
 CXX="g++"
@@ -118,11 +118,11 @@ shortusage()
 
 usage()
 {
-    echo "${ME}: icu-config: ICU configuration helper script"
+    echo "${ME}: icu42-config: ICU configuration helper script"
     echo
     echo "The most commonly used options will be --cflags, --cxxflags, --cppflags, and --ldflags."
-    echo 'Example (in make):   CPFLAGS=$(shell icu-config --cppflags)'
-    echo '                     LDFLAGS=$(shell icu-config --ldflags)'
+    echo 'Example (in make):   CPFLAGS=$(shell icu42-config --cppflags)'
+    echo '                     LDFLAGS=$(shell icu42-config --ldflags)'
     echo "                     (etc).."
     echo
     echo "Usage:"
@@ -189,7 +189,7 @@ do
 	    ;;
 
     --so)
-        pkg-config --variable=SO icu
+        pkg-config --variable=SO icu42
         ;;
 
 	--bindir)
@@ -240,7 +240,7 @@ do
 	    ;;
 
 	--cflags)
-	    pkg-config --variable=CFLAGS icu
+	    pkg-config --variable=CFLAGS icu42
 	    ;;
 	    
 	--cc)
@@ -252,57 +252,58 @@ do
 	    ;;
 
 	--cxxflags)
-	    pkg-config --variable=CXXFLAGS icu
+	    pkg-config --variable=CXXFLAGS icu42
 	    ;;
 
 	--cppflags)
 	    # Don't echo the -I. - it's unneeded.
-	    CPPFLAGS=`pkg-config --variable=CPPFLAGS icu`
+	    CPPFLAGS=`pkg-config --variable=CPPFLAGS icu42`
 	    echo $ECHO_N "${CPPFLAGS}${ECHO_C} " | sed -e 's/-I. //'
 	    ;;
 
 	--cppflags-searchpath)
-	    echo $ECHO_N "-I${prefix}/include${ECHO_C} "
+	    INCLPATH=`pkg-config --variable=includedir icu42`
+	    echo $ECHO_N "-I${INCLPATH}${ECHO_C} "
 	    ;;
 
 	--cppflags-dynamic)
-	    pkg-config --variable=SHAREDLIBCPPFLAGS icu
+	    pkg-config --variable=SHAREDLIBCPPFLAGS icu42
 	    ;;
 
 	--cxxflags-dynamic)
-	    pkg-config --variable=SHAREDLIBCXXFLAGS icu
+	    pkg-config --variable=SHAREDLIBCXXFLAGS icu42
 	    ;;
 
 	--cflags-dynamic)
-	    pkg-config --variable=SHAREDLIBCFLAGS icu
+	    pkg-config --variable=SHAREDLIBCFLAGS icu42
 	    ;;
 
 	--ldflags-system)
-	    pkg-config --variable=ICULIBS_SYSTEMLIBS icu
+	    pkg-config --variable=ICULIBS_SYSTEMLIBS icu42
 	    ;;
 
 	--ldflags)
-	    pkg-config --libs icu
+	    pkg-config --libs icu42
 	    ;;
 
 	--ldflags-libsonly)
-	    pkg-config --variable=ICULIBS_LIBSONLY icu
+	    pkg-config --variable=ICULIBS_LIBSONLY icu42
 	    ;;
 
 	--ldflags-icuio)
-	    pkg-config --variable=ICULIBS_ICUIO icu
+	    pkg-config --variable=ICULIBS_ICUIO icu42
 	    ;;
 
 	--ldflags-obsolete)
-	    pkg-config --variable=ICULIBS_OBSOLETE icu
+	    pkg-config --variable=ICULIBS_OBSOLETE icu42
 	    ;;
 
 	--ldflags-toolutil)
-	    pkg-config --variable=ICULIBS_TOOLUTIL icu
+	    pkg-config --variable=ICULIBS_TOOLUTIL icu42
 	    ;;
 
 	--ldflags-layout)
-	    pkg-config --variable=ICULIBS_LAYOUT icu
+	    pkg-config --variable=ICULIBS_LAYOUT icu42
 	    ;;
 
 	--ldflags-searchpath)
@@ -334,11 +335,11 @@ do
 	    ;;
 
 	--sysconfdir)
-	    pkg-config --variable=sysconfdir icu
+	    pkg-config --variable=sysconfdir icu42
 	    ;;
 
 	--mandir)
-	    pkg-config --variable=mandir icu
+	    pkg-config --variable=mandir icu42
 	    ;;
 
 	--shared-datadir)
@@ -354,7 +355,7 @@ do
 	    ;;
 
 	--icudata)
-	    pkg-config --variable=ICUDATA_NAME icu
+	    pkg-config --variable=ICUDATA_NAME icu42
 	    ;;
 
 	--icudata-mode)
@@ -362,19 +363,19 @@ do
 	    ;;
 
 	--icudata-install-dir)
-            pkg-config --variable=ICUPKGDATA_DIR icu
+            pkg-config --variable=ICUPKGDATA_DIR icu42
 	    ;;
 	    
 	--icudatadir)
-	    pkg-config --variable=ICUDATA_DIR icu
+	    pkg-config --variable=ICUDATA_DIR icu42
 	    ;;
 
 	--shlib-c)
-	    pkg-config --variable=SHLIB_c icu
+	    pkg-config --variable=SHLIB_c icu42
 	    ;;
 
 	--shlib-cc)
-	    pkg-config --variable=SHLIB_cc icu
+	    pkg-config --variable=SHLIB_cc icu42
 	    ;;
 
 	--version)

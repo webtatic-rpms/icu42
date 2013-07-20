@@ -1,8 +1,14 @@
 %define packagename icu
 
+# Force include and library files into a nonstandard place
+%{expand: %%define _origincludedir %{_includedir}}
+%{expand: %%define _origlibdir %{_libdir}}
+%define _includedir %{_origincludedir}/%{name}
+%define _libdir %{_origlibdir}/%{name}
+
 Name:      icu42
 Version:   4.2.1
-Release:   1%{?dist}
+Release:   2%{?dist}
 Summary:   International Components for Unicode
 Group:     Development/Tools
 License:   MIT and UCD and Public Domain
@@ -29,8 +35,6 @@ Tools and utilities for developing with icu.
 %package -n lib%{name}
 Summary: International Components for Unicode - libraries
 Group:   System Environment/Libraries
-Provides: libicu = %{version}-%{release}
-Conflicts: libicu < %{version}
 
 %description -n lib%{name}
 The International Components for Unicode (ICU) libraries provide
@@ -49,8 +53,6 @@ Summary:  Development files for International Components for Unicode
 Group:    Development/Libraries
 Requires: lib%{name} = %{version}-%{release}
 Requires: pkgconfig
-Provides: libicu-devel = %{version}-%{release}
-Conflicts: libicu-devel < %{version}
 
 %description -n lib%{name}-devel
 Includes and definitions for developing with icu.
@@ -91,10 +93,27 @@ rm -rf $RPM_BUILD_ROOT source/__docs
 make -C source install DESTDIR=$RPM_BUILD_ROOT
 make -C source install-doc docdir=__docs
 chmod +x $RPM_BUILD_ROOT%{_libdir}/*.so.*
-cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/%{packagename}-config
-chmod 0755 $RPM_BUILD_ROOT%{_bindir}/%{packagename}-config
+cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/%{name}-icu-config
+chmod 0755 $RPM_BUILD_ROOT%{_bindir}/%{name}-icu-config
+rm $RPM_BUILD_ROOT%{_bindir}/icu-config
+
+mv $RPM_BUILD_ROOT%{_mandir}/man1/icu-config.1.gz $RPM_BUILD_ROOT%{_mandir}/man1/icu42-icu-config.1.gz
+
+mkdir -p ${RPM_BUILD_ROOT}%{_origlibdir}
+pushd ${RPM_BUILD_ROOT}%{_origlibdir}
+mv -f ${RPM_BUILD_ROOT}%{_libdir}/libicu*.so.42.* .
+cp -p -d ${RPM_BUILD_ROOT}%{_libdir}/libicu*.so.42 .
+popd
+
+pushd ${RPM_BUILD_ROOT}%{_libdir}
+find ../.. -name 'libicu*.so.42.*' -print0 | xargs -0 -I {} ln -s {} .
+popd
+
 sed -i s/\\\$\(THREADSCXXFLAGS\)// $RPM_BUILD_ROOT/%{_libdir}/pkgconfig/icu.pc
 sed -i s/\\\$\(THREADSCPPFLAGS\)/-D_REENTRANT/ $RPM_BUILD_ROOT/%{_libdir}/pkgconfig/icu.pc
+
+mv $RPM_BUILD_ROOT/%{_libdir}/pkgconfig $RPM_BUILD_ROOT/%{_origlibdir}/pkgconfig
+mv $RPM_BUILD_ROOT/%{_origlibdir}/pkgconfig/icu.pc $RPM_BUILD_ROOT/%{_origlibdir}/pkgconfig/icu42.pc
 
 %check
 make -C source check
@@ -131,16 +150,17 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n lib%{name}
 %defattr(-,root,root,-)
-%{_libdir}/*.so.*
+%{_origlibdir}/*.so.*
 
 %files -n lib%{name}-devel
 %defattr(-,root,root,-)
-%{_bindir}/%{packagename}-config
-%{_mandir}/man1/%{packagename}-config.1*
+%{_bindir}/%{name}-icu-config
+%{_mandir}/man1/%{name}-icu-config.1*
 %{_includedir}/layout
 %{_includedir}/unicode
 %{_libdir}/*.so
-%{_libdir}/pkgconfig/icu.pc
+%{_libdir}/*.so.*
+%{_origlibdir}/pkgconfig/icu42.pc
 %{_libdir}/%{packagename}
 %dir %{_datadir}/%{packagename}
 %dir %{_datadir}/%{packagename}/%{version}
@@ -154,6 +174,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc source/__docs/%{packagename}/html/*
 
 %changelog
+* Sat Jul 20 2013 Andy Thompson <andy@webtatic.com> - 4.2.1-2
+- Change libicu42 to be installable in parallel with libicu and relax conflicts
+
 * Sat Jun 22 2013 Andy Thompson <andy@webtatic.com> - 4.2.1-1
 - Fork from EL 6.4 icu-4.2.1-9.1
 - Update package name to icu42
