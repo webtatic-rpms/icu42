@@ -1,0 +1,49 @@
+diff -Nuar icu.icu42/source/tools/pkgdata/pkgdata.1.in icu/source/tools/pkgdata/pkgdata.1.in
+--- icu.icu42/source/tools/pkgdata/pkgdata.1.in	2013-07-21 08:40:12.000000000 +0100
++++ icu/source/tools/pkgdata/pkgdata.1.in	2013-07-21 09:55:05.000000000 +0100
+@@ -186,7 +186,7 @@
+ not limited to, setting variables used by
+ .BR make (1)
+ during the build of the packaged file. Note: If 
+-.BR icu-config 
++.BR icu42-icu-config 
+ is available, then this option is not needed.
+ .TP
+ .BI "\-p\fP, \fB\-\-name" " name"
+diff -Nuar icu.icu42/source/tools/pkgdata/pkgdata.cpp icu/source/tools/pkgdata/pkgdata.cpp
+--- icu.icu42/source/tools/pkgdata/pkgdata.cpp	2013-07-21 08:40:12.000000000 +0100
++++ icu/source/tools/pkgdata/pkgdata.cpp	2013-07-21 09:54:57.000000000 +0100
+@@ -1438,13 +1438,13 @@
+     FILE *p;
+     size_t n;
+     static char buf[512] = "";
+-    const char cmd[] = "icu-config --incpkgdatafile";
++    const char cmd[] = "icu42-icu-config --incpkgdatafile";
+ 
+     p = popen(cmd, "r");
+ 
+     if(p == NULL)
+     {
+-        fprintf(stderr, "%s: icu-config: No icu-config found. (fix PATH or use -O option)\n", progname);
++        fprintf(stderr, "%s: icu42-icu-config: No icu42-icu-config found. (fix PATH or use -O option)\n", progname);
+         return -1;
+     }
+ 
+@@ -1454,7 +1454,7 @@
+ 
+     if(n<=0)
+     {
+-        fprintf(stderr,"%s: icu-config: Could not read from icu-config. (fix PATH or use -O option)\n", progname);
++        fprintf(stderr,"%s: icu42-icu-config: Could not read from icu42-icu-config. (fix PATH or use -O option)\n", progname);
+         return -1;
+     }
+ 
+@@ -1473,7 +1473,7 @@
+ 
+     if(buf[0] == 0)
+     {
+-        fprintf(stderr, "%s: icu-config: invalid response from icu-config (fix PATH or use -O option)\n", progname);
++        fprintf(stderr, "%s: icu42-icu-config: invalid response from icu42-icu-config (fix PATH or use -O option)\n", progname);
+         return -1;
+     }
+ 

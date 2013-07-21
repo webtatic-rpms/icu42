@@ -29,6 +29,8 @@ Patch5:  icu.XXXX.install.patch
 Patch6:  icu.7119.s390x.patch
 Patch7:  canonicalize.patch
 
+Patch10: icu.icu42.patch
+
 %description
 Tools and utilities for developing with icu.
 
@@ -76,6 +78,8 @@ Conflicts: libicu-doc < %{version}
 %patch6 -p1 -b .icu.7119.s390x.patch
 %patch7 -p0 -b .canonicalize.patch
 
+%patch10 -p1 -b .icu42.patch
+
 %build
 cd source
 sed -e '/AC_PREREQ/s/2.63/2.59/' -i configure.in
@@ -96,8 +100,7 @@ chmod +x $RPM_BUILD_ROOT%{_libdir}/*.so.*
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/%{name}-icu-config
 chmod 0755 $RPM_BUILD_ROOT%{_bindir}/%{name}-icu-config
 rm $RPM_BUILD_ROOT%{_bindir}/icu-config
-
-mv $RPM_BUILD_ROOT%{_mandir}/man1/icu-config.1.gz $RPM_BUILD_ROOT%{_mandir}/man1/icu42-icu-config.1.gz
+mv $RPM_BUILD_ROOT%{_mandir}/man1/icu-config.1 $RPM_BUILD_ROOT%{_mandir}/man1/%{name}-icu-config.1
 
 mkdir -p ${RPM_BUILD_ROOT}%{_origlibdir}
 pushd ${RPM_BUILD_ROOT}%{_origlibdir}
